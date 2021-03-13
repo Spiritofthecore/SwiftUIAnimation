@@ -13,6 +13,7 @@ struct ContentView: View {
     @State var phone: String = ""
     @State var password: String = ""
     @State var isSecure: Bool = true
+    @State var busPosition: CGPoint = CGPoint(x: 0, y: 0)
     
     var repeatingCloudBounce: Animation {
         Animation
@@ -165,9 +166,47 @@ struct ContentView: View {
                             .frame(width: 82, height: 68)
                         Spacer()
                     }
+                    BusView()
                 }
             }
         }.edgesIgnoringSafeArea(.all)
+    }
+}
+
+struct BusView: View {
+    
+    @State var degree: Double = 0.0
+    var repeatingWheelBounce: Animation {
+        Animation
+            .easeOut(duration: 0.5)
+            .repeatForever(autoreverses: false)
+    }
+    
+    var body: some View {
+        ZStack (alignment: .center) {
+            Image("bus")
+                .resizable()
+                .frame(width: 133.25, height: 51.38)
+                .padding(.bottom, 87)
+            Image("leftWheel")
+                .resizable()
+                .frame(width: 16.87, height: 16.87)
+                .rotationEffect(Angle(degrees: degree), anchor: .center)
+                .padding(.leading, -41)
+                .padding(.top, -29)
+                .onAppear(perform: {
+                    withAnimation(self.repeatingWheelBounce) { self.degree = 360}
+                })
+            Image("rightWheel")
+                .resizable()
+                .frame(width: 16.87, height: 16.87)
+                .rotationEffect(Angle(degrees: degree), anchor: .center)
+                .padding(.leading, 80)
+                .padding(.top, -29)
+                .onAppear(perform: {
+                    withAnimation(self.repeatingWheelBounce) { self.degree = 360}
+                })
+        }
     }
 }
 
