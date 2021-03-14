@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+var FULL_H = UIScreen.main.bounds.height
+var FULL_W = UIScreen.main.bounds.width
+
 struct ContentView: View {
     
     @State var size: CGFloat = 0.95
@@ -154,6 +157,7 @@ struct ContentView: View {
                             .font(.footnote)
                             .foregroundColor(.white)
                     }
+                    BusView()
                     HStack {
                         Spacer()
                         Image("rightBush")
@@ -166,7 +170,6 @@ struct ContentView: View {
                             .frame(width: 82, height: 68)
                         Spacer()
                     }
-                    BusView()
                 }
             }
         }.edgesIgnoringSafeArea(.all)
@@ -176,6 +179,13 @@ struct ContentView: View {
 struct BusView: View {
     
     @State var degree: Double = 0.0
+    @State var currentStep: CGFloat = 0
+    @State var currentAngle: Angle = Angle(degrees: 0)
+    @State var currentPoint: CGPoint = CGPoint(x: 0, y: 0)
+    let timer = Timer.publish(every: 0.05, on: RunLoop.main, in: RunLoop.Mode.default).autoconnect()
+    let path: CustomPath = CustomPath(startPoint: CGPoint(x: -60, y: FULL_H + 100),
+                                      endPoint: CGPoint(x: FULL_W + 60, y: FULL_H + 100),
+                                      control: CGPoint(x: FULL_W / 2, y: FULL_H - 240))
     var repeatingWheelBounce: Animation {
         Animation
             .easeOut(duration: 0.5)
@@ -183,7 +193,7 @@ struct BusView: View {
     }
     
     var body: some View {
-        ZStack (alignment: .center) {
+        return ZStack (alignment: .center) {
             Image("bus")
                 .resizable()
                 .frame(width: 133.25, height: 51.38)
@@ -207,6 +217,15 @@ struct BusView: View {
                     withAnimation(self.repeatingWheelBounce) { self.degree = 360}
                 })
         }
+        .rotationEffect(currentAngle).position(currentPoint)
+        .onReceive(timer, perform: { _ in
+            self.currentStep += 1
+            if Int(self.currentStep) == self.path.kSubdivisions {
+                self.currentStep = 1
+            }
+            currentAngle = path.angle(at: currentStep)
+            currentPoint = path.point(at: currentStep)
+        })
     }
 }
 
