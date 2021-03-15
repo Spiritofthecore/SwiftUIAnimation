@@ -254,7 +254,7 @@ struct CustomTF: View {
         }
         .frame(height: 56)
         .cornerRadius(5)
-        .shadow(color: .gray, radius: 5, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/)
+        .shadow(color: Color(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.06)), radius: 5, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/)
     }
 }
 
